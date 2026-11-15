@@ -18,8 +18,8 @@ import { RouterLink } from '@angular/router';
   styles: [
     `
       footer {
-        background: #101010;
-        color: #fff;
+        background: #808080;
+        color: #000;
       }
       .wrap {
         max-width: 1000px;

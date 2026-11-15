@@ -26,7 +26,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     </header>
   `,
   styles: [`
-    .topbar { background: #101010; color: #fff; position: sticky; top: 0; z-index: 10; }
+    .topbar { background: #808080; color: #000; position: sticky; top: 0; z-index: 10; }
     .topbar-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; gap: 20px; flex-wrap: wrap; }
     .brand { position: relative; display: flex; align-items: center; gap: 16px; color: #000; text-decoration: none; }
     .logo-wrap { position: relative; display: inline-block; z-index: 2; }
@@ -35,8 +35,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     .brand strong { display: block; line-height: 1.1; font-size: 24px; }
     .brand small { opacity: .9; font-size: 14px; }
     nav { display: flex; gap: 8px; flex-wrap: wrap; }
-    nav a { color: #fff; text-decoration: none; padding: 10px 16px; border-radius: 8px; font-size: 16px; }
-    nav a.active, nav a:hover { background: #f0e000; color: #101010; }
+    nav a { color: #000; text-decoration: none; padding: 10px 16px; border-radius: 8px; font-size: 16px; }
+    nav a.active, nav a:hover { background: #f0e000; color: #000; }
     .wrap { max-width: 1000px; margin: 0 auto; }
   `]
 })
