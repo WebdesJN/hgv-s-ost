@@ -8,7 +8,7 @@ import { RouterLink } from '@angular/router';
   template: `
     <section class="hero">
       <h1>Ost Blog</h1>
-      <p>News, Infos und Tipps aus Stuttgart-Ost – ganz simpel nachgebaut.</p>
+      <p>News, Infos und Tipps aus Stuttgart-Ost</p>
       <a routerLink="/aktuelles" class="btn">Zu Aktuelles</a>
     </section>
     <section class="grid">
