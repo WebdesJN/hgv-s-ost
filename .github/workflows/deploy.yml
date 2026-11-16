@@ -33,7 +33,12 @@ jobs:
         run: npm ci
 
       - name: Build Angular
-        run: npx ng build --base-href=/hgv-s-ost/
+        run: npm run build -- --base-href=/hgv-s-ost/
+
+      - name: Verify build output
+        run: |
+          ls -la dist/stuttgart-ost-hgv/
+          test -f dist/stuttgart-ost-hgv/index.html && echo "index.html found" || (echo "index.html MISSING!" && exit 1)
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
