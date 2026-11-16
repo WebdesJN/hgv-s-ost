@@ -12,7 +12,7 @@ import { Member } from '../../../models/member.model';
     <div class="admin-page">
       <div class="page-header">
         <h1>{{ isEdit ? 'Mitglied bearbeiten' : 'Neues Mitglied' }}</h1>
-        <a routerLink="../" class="btn">Zurück zur Liste</a>
+        <a (click)="goBack()" class="btn">Zurück zur Liste</a>
       </div>
 
       <form (ngSubmit)="onSubmit()" #form="ngForm" class="form-card">
@@ -151,5 +151,9 @@ export class AdminMemberFormComponent {
     } catch (err: any) {
       this.error = err.message || 'Löschen fehlgeschlagen';
     }
+  }
+
+  goBack() {
+    this.router.navigate(['/admin/members']);
   }
 }
