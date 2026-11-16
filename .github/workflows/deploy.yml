@@ -30,20 +30,22 @@ jobs:
           node-version: '22'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build Angular
-        run: npm run build -- --base-href=/hgv-s-ost/
+        run: npx ng build --configuration production --base-href=/hgv-s-ost/
 
-      - name: Verify build output
+      - name: Find index.html location
         run: |
-          ls -la dist/stuttgart-ost-hgv/
-          test -f dist/stuttgart-ost-hgv/index.html && echo "index.html found" || (echo "index.html MISSING!" && exit 1)
+          echo "Searching for index.html..."
+          find dist -name "index.html" -type f 2>/dev/null || echo "index.html NOT FOUND anywhere!"
+          ls -la dist/stuttgart-ost-hgv/ 2>/dev/null || echo "dist/stuttgart-ost-hgv not found"
+          ls -la dist/stuttgart-ost-hgv/browser/ 2>/dev/null || echo "browser subfolder not found"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/stuttgart-ost-hgv
+          path: dist/stuttgart-ost-hgv/browser
 
       - name: Deploy to GitHub Pages
         id: deployment
