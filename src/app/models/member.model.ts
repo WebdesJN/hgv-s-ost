@@ -11,6 +11,6 @@ export interface Member {
   eintrittsdatum?: string;
   aktiv: boolean;
   bild_url?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  created_at?: string;
+  updated_at?: string;
 }
