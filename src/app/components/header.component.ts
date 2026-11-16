@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -21,6 +22,12 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Startseite</a>
           <a routerLink="/aktuelles" routerLinkActive="active">Aktuelles</a>
           <a routerLink="/kontakt" routerLinkActive="active">Kontakt</a>
+          @if (!isLoggedIn()) {
+            <a routerLink="/login" class="btn-login">Login</a>
+          } @else {
+            <a routerLink="/admin" class="btn-admin">Admin</a>
+            <button class="btn-logout" (click)="logout()">Logout</button>
+          }
         </nav>
       </div>
     </header>
@@ -34,13 +41,40 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     .brand-mark { position: relative; z-index: 2; width: 180px; height: 180px; object-fit: contain; display: block; }
     .brand strong { display: block; line-height: 1.1; font-size: 24px; }
     .brand small { opacity: .9; font-size: 14px; }
-    nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    nav { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
     nav a { color: #000; text-decoration: none; padding: 10px 16px; border-radius: 8px; font-size: 16px; }
     nav a.active, nav a:hover { background: #f0e000; color: #000; }
+    .btn-login { background: #1f6f3f; color: white !important; }
+    .btn-login:hover { background: #175a32; }
+    .btn-admin { background: #1f6f3f; color: white !important; }
+    .btn-admin:hover { background: #175a32; }
+    .btn-logout { background: #dc3545; color: white !important; border: none; padding: 10px 16px; border-radius: 8px; font-size: 16px; cursor: pointer; }
+    .btn-logout:hover { background: #b52b37; }
     .wrap { max-width: 1000px; margin: 0 auto; }
   `]
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+  private auth = inject(AuthService);
+  isLoggedIn = signal(false);
+
+  constructor() {
+    this.checkSession();
+    this.auth.onAuthStateChange((user) => {
+      this.isLoggedIn.set(!!user);
+    });
+  }
+
+  async checkSession() {
+    const { data } = await this.auth.getCurrentUser();
+    this.isLoggedIn.set(!!data?.user);
+  }
+
+  async logout() {
+    await this.auth.logout();
+    this.isLoggedIn.set(false);
+    location.href = '/';
+  }
+}
 
 
 

@@ -1,18 +1,21 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NewsService } from '../services/news.service';
+import { NewsItem } from '../models/news.model';
 
 @Component({
   selector: 'app-news-detail',
   standalone: true,
   imports: [RouterLink],
   template: `
-    @if (item) {
+    @if (loading()) {
+      <p>Lade …</p>
+    } @else if (item()) {
       <a routerLink="/aktuelles" class="back">← Zurück zu Aktuelles</a>
-      <span class="badge">{{ item.category }}</span>
-      <h1>{{ item.title }}</h1>
-      <p class="meta">Details · Kategorie: {{ item.category }} · Veröffentlicht: {{ item.published }} · Zugriffe: {{ item.views }}</p>
-      @for (p of item.content; track $index) {
+      <span class="badge">{{ item()?.kategorie }}</span>
+      <h1>{{ item()?.titel }}</h1>
+      <p class="meta">Details · Kategorie: {{ item()?.kategorie }} · Veröffentlicht: {{ item()?.veroeffentlicht_am }} · Zugriffe: {{ item()?.views }}</p>
+      @for (p of item()?.inhalt; track $index) {
         <p>{{ p }}</p>
       }
     } @else {
@@ -32,7 +35,24 @@ import { NewsService } from '../services/news.service';
 export class NewsDetailComponent {
   private route = inject(ActivatedRoute);
   private news = inject(NewsService);
-  item = this.news.getById(Number(this.route.snapshot.paramMap.get('id')));
+  item = signal<NewsItem | null>(null);
+  loading = signal(true);
+
+  constructor() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.news.getById(id).then((found) => {
+        this.item.set(found);
+        this.loading.set(false);
+      }).catch(() => {
+        this.item.set(null);
+        this.loading.set(false);
+      });
+    } else {
+      this.item.set(null);
+      this.loading.set(false);
+    }
+  }
 }
 
 

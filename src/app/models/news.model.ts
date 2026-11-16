@@ -1,9 +1,12 @@
 export interface NewsItem {
-  id: number;
-  title: string;
-  category: string;
-  published: string;
-  views: number;
+  id: string;
+  titel: string;
   teaser: string;
-  content: string[];
+  inhalt: string[];
+  kategorie: string;
+  veroeffentlicht_am: string;
+  views: number;
+  bild_url?: string;
+  created_at?: string;
+  updated_at?: string;
 }

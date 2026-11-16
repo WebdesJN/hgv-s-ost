@@ -9,8 +9,9 @@ import { RouterLink } from '@angular/router';
     <footer>
       <div class="wrap">
         <p class="links">
-          <a routerLink="/">Startseite</a> · <a routerLink="/aktuelles">Aktuelles</a> ·
-          <a href="#">Impressum</a> · <a href="#">Datenschutz</a>
+          <a routerLink="/">Startseite</a> ·
+          <a routerLink="/aktuelles">Aktuelles</a> · <a href="#">Impressum</a> ·
+          <a href="#">Datenschutz</a>
         </p>
       </div>
     </footer>
@@ -41,5 +42,3 @@ import { RouterLink } from '@angular/router';
   ],
 })
 export class FooterComponent {}
-
-

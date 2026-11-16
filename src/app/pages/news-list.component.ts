@@ -2,6 +2,7 @@ import { Component, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NewsService } from '../services/news.service';
+import { NewsItem } from '../models/news.model';
 
 @Component({
   selector: 'app-news-list',
@@ -11,34 +12,38 @@ import { NewsService } from '../services/news.service';
     <h1>Aktuelles</h1>
     <p class="sub">Nachrichten und Infos aus dem Stadtteil Stuttgart-Ost</p>
 
-    <div class="toolbar">
-      <input [(ngModel)]="search" placeholder="Suchen …" aria-label="Suchen" />
-      <select [(ngModel)]="category" aria-label="Kategorie">
-        <option value="">Alle Kategorien</option>
-        @for (c of categories; track c) {
-          <option [value]="c">{{ c }}</option>
+    @if (loading()) {
+      <p>Lade …</p>
+    } @else {
+      <div class="toolbar">
+        <input [(ngModel)]="search" placeholder="Suchen …" aria-label="Suchen" />
+        <select [(ngModel)]="category" aria-label="Kategorie">
+          <option value="">Alle Kategorien</option>
+          @for (c of categories(); track c) {
+            <option [value]="c">{{ c }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="list">
+        @for (n of filtered(); track n.id) {
+          <article class="item">
+            <div class="meta">
+              <span class="badge">{{ n.kategorie }}</span>
+              <span>Veröffentlicht: {{ n.veroeffentlicht_am }}</span>
+              <span>Zugriffe: {{ n.views }}</span>
+            </div>
+            <h2><a [routerLink]="['/aktuelles', n.id]">{{ n.titel }}</a></h2>
+            <p>{{ n.teaser }}</p>
+            <a [routerLink]="['/aktuelles', n.id]" class="details">Details →</a>
+          </article>
+        } @empty {
+          <p>Keine Einträge gefunden.</p>
         }
-      </select>
-    </div>
+      </div>
 
-    <div class="list">
-      @for (n of filtered(); track n.id) {
-        <article class="item">
-          <div class="meta">
-            <span class="badge">{{ n.category }}</span>
-            <span>Veröffentlicht: {{ n.published }}</span>
-            <span>Zugriffe: {{ n.views }}</span>
-          </div>
-          <h2><a [routerLink]="['/aktuelles', n.id]">{{ n.title }}</a></h2>
-          <p>{{ n.teaser }}</p>
-          <a [routerLink]="['/aktuelles', n.id]" class="details">Details →</a>
-        </article>
-      } @empty {
-        <p>Keine Einträge gefunden.</p>
-      }
-    </div>
-
-    <p class="hint">Start · Zurück · 1 · Weiter · Ende (Demo: alles auf einer Seite)</p>
+      <p class="hint">Start · Zurück · 1 · Weiter · Ende</p>
+    }
   `,
   styles: [`
     h1 { color: #1f6f3f; margin-bottom: 0; }
@@ -60,18 +65,32 @@ import { NewsService } from '../services/news.service';
 export class NewsListComponent {
   search = signal('');
   category = signal('');
-  categories: string[];
+  categories = signal<string[]>([]);
+  newsItems = signal<NewsItem[]>([]);
+  loading = signal(true);
 
   filtered = computed(() => {
     const q = this.search().toLowerCase().trim();
     const cat = this.category();
-    return this.news
-      .getAll()
-      .filter((n) => (!cat || n.category === cat) && (!q || (n.title + n.teaser).toLowerCase().includes(q)));
+    return this.newsItems()
+      .filter((n) => (!cat || n.kategorie === cat) && (!q || (n.titel + n.teaser).toLowerCase().includes(q)));
   });
 
   constructor(private news: NewsService) {
-    this.categories = this.news.getCategories();
+    this.load();
+  }
+
+  async load() {
+    try {
+      this.loading.set(true);
+      const [items, cats] = await Promise.all([this.news.getAll(), this.news.getCategories()]);
+      this.newsItems.set(items);
+      this.categories.set(cats);
+    } catch (err) {
+      console.error('Fehler beim Laden der News:', err);
+    } finally {
+      this.loading.set(false);
+    }
   }
 }
 
