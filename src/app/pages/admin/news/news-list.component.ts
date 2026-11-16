@@ -31,7 +31,12 @@ import { NewsItem } from '../../../models/news.model';
           <tbody>
             @for (n of news; track n.id) {
               <tr>
-                <td>{{ n.titel }}</td>
+                <td>
+                  @if (n.bild_url) {
+                    <img [src]="n.bild_url" [alt]="n.titel" class="admin-thumb" />
+                  }
+                  {{ n.titel }}
+                </td>
                 <td>{{ n.kategorie || '-' }}</td>
                 <td>{{ n.veroeffentlicht_am || '-' }}</td>
                 <td class="actions">
@@ -54,6 +59,7 @@ import { NewsItem } from '../../../models/news.model';
     th { background: #f4f9f4; font-weight: 600; color: #333; }
     tr:last-child td { border-bottom: none; }
     .actions { white-space: nowrap; }
+    .admin-thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; margin-right: 8px; vertical-align: middle; border: 1px solid #ddd; }
     .btn { padding: 8px 16px; background: #1f6f3f; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; text-decoration: none; font-size: 14px; }
     .btn-small { padding: 6px 12px; font-size: 13px; margin-right: 6px; }
     .btn-small.btn-delete { background: #dc3545; color: white; }

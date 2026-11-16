@@ -28,6 +28,9 @@ import { NewsItem } from '../models/news.model';
       <div class="list">
         @for (n of filtered(); track n.id) {
           <article class="item">
+            @if (n.bild_url) {
+              <img [src]="n.bild_url" [alt]="n.titel" class="item-image" />
+            }
             <div class="meta">
               <span class="badge">{{ n.kategorie }}</span>
               <span>Veröffentlicht: {{ n.veroeffentlicht_am }}</span>
@@ -53,6 +56,7 @@ import { NewsItem } from '../models/news.model';
     input { flex: 1; min-width: 200px; }
     .list { display: grid; gap: 14px; }
     .item { border: 1px solid #e3e3e3; border-radius: 12px; padding: 16px; background: #fff; }
+    .item-image { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; display: block; }
     .item h2 { margin: 8px 0; font-size: 20px; }
     .item h2 a { color: #1a1a1a; text-decoration: none; }
     .item h2 a:hover { color: #1f6f3f; text-decoration: underline; }

@@ -14,6 +14,9 @@ import { NewsItem } from '../models/news.model';
       <a routerLink="/aktuelles" class="back">← Zurück zu Aktuelles</a>
       <span class="badge">{{ item()?.kategorie }}</span>
       <h1>{{ item()?.titel }}</h1>
+      @if (item()?.bild_url) {
+        <img [src]="item()?.bild_url" [alt]="item()?.titel" class="detail-image" />
+      }
       <p class="meta">Details · Kategorie: {{ item()?.kategorie }} · Veröffentlicht: {{ item()?.veroeffentlicht_am }} · Zugriffe: {{ item()?.views }}</p>
       @for (p of item()?.inhalt; track $index) {
         <p>{{ p }}</p>
@@ -28,6 +31,7 @@ import { NewsItem } from '../models/news.model';
     .back { color: #1f6f3f; text-decoration: none; font-size: 14px; display: inline-block; margin-bottom: 10px; }
     .badge { background: #1f6f3f; color: #fff; border-radius: 20px; padding: 2px 10px; font-size: 12px; }
     h1 { margin: 8px 0; }
+    .detail-image { width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; margin: 16px 0; display: block; }
     .meta { color: #666; font-size: 13px; border-bottom: 1px solid #eee; padding-bottom: 12px; }
     p { line-height: 1.6; }
   `]
