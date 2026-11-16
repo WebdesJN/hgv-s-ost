@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { MemberService } from '../../services/member.service';
 import { NewsService } from '../../services/news.service';
 import { AuthService } from '../../services/auth.service';
@@ -7,7 +7,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, RouterOutlet],
   template: `
     <div class="dashboard">
       <h1>Admin-Bereich</h1>
@@ -29,6 +29,10 @@ import { AuthService } from '../../services/auth.service';
         <a routerLink="news" class="btn btn-secondary">News verwalten</a>
         <button class="btn btn-danger" (click)="logout()">Abmelden</button>
       </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid #ddd;" />
+
+      <router-outlet />
     </div>
   `,
   styles: [`
