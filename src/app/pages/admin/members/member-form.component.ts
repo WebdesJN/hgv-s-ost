@@ -131,7 +131,8 @@ export class AdminMemberFormComponent {
       if (this.isEdit && this.member.id) {
         await this.memberService.update(this.member.id, this.member);
       } else {
-        await this.memberService.create(this.member);
+        const { id, ...payload } = this.member;
+        await this.memberService.create(payload as Omit<Member, 'id'>);
       }
       this.router.navigate(['../'], { relativeTo: this.route });
     } catch (err: any) {

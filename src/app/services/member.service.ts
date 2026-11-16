@@ -35,7 +35,7 @@ export class MemberService {
     return data as Member;
   }
 
-  async create(member: Omit<Member, 'id' | 'createdAt' | 'updatedAt'>): Promise<Member> {
+  async create(member: Omit<Member, 'id'>): Promise<Member> {
     const { data, error } = await supabase
       .from(this.table)
       .insert([member])
