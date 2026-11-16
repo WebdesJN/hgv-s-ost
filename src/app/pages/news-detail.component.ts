@@ -48,6 +48,14 @@ export class NewsDetailComponent {
       this.news.getById(id).then((found) => {
         this.item.set(found);
         this.loading.set(false);
+        this.news.incrementViews(id).then(() => {
+          const current = this.item();
+          if (current) {
+            this.item.set({ ...current, views: (current.views ?? 0) + 1 });
+          }
+        }).catch((err) => {
+          console.error('Fehler beim Erhöhen des Zugriffszählers:', err);
+        });
       }).catch(() => {
         this.item.set(null);
         this.loading.set(false);

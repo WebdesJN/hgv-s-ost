@@ -59,5 +59,20 @@ export class NewsService {
     const { error } = await supabase.from(this.table).delete().eq('id', id);
     if (error) throw error;
   }
+
+  async incrementViews(id: string): Promise<void> {
+    const { data, error } = await supabase
+      .from(this.table)
+      .select('views')
+      .eq('id', id)
+      .single();
+    if (error) throw error;
+    const current = (data as any)?.views ?? 0;
+    const { error: updError } = await supabase
+      .from(this.table)
+      .update({ views: current + 1, updated_at: new Date().toISOString() })
+      .eq('id', id);
+    if (updError) throw updError;
+  }
 }
 
