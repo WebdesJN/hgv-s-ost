@@ -14,8 +14,8 @@ import { AuthService } from '../services/auth.service';
             <img class="brand-mark" src="HGV LOGO.png" alt="HGV Logo" />
           </div>
           <span>
-            <strong>Ost Online</strong>
-            <small>abgespeckte Aktuelles-Version</small>
+            <strong>HGV Stuttgart Ost</strong>
+            <small>Aktuelles & Nachbarschaft</small>
           </span>
         </a>
         <nav>
@@ -23,34 +23,79 @@ import { AuthService } from '../services/auth.service';
           <a routerLink="/aktuelles" routerLinkActive="active">Aktuelles</a>
           <a routerLink="/kontakt" routerLinkActive="active">Kontakt</a>
           @if (!isLoggedIn()) {
-            <a routerLink="/login" class="btn-login">Login</a>
+            <a routerLink="/login" class="btn btn-primary">Login</a>
           } @else {
-            <a routerLink="/admin" class="btn-admin">Admin</a>
-            <button class="btn-logout" (click)="logout()">Logout</button>
+            <a routerLink="/admin" class="btn btn-primary">Admin</a>
+            <button class="btn btn-ghost" (click)="logout()">Logout</button>
           }
         </nav>
       </div>
     </header>
   `,
   styles: [`
-    .topbar { background: #808080; color: #000; position: sticky; top: 0; z-index: 10; }
-    .topbar-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; gap: 20px; flex-wrap: wrap; }
-    .brand { position: relative; display: flex; align-items: center; gap: 16px; color: #000; text-decoration: none; }
-    .logo-wrap { position: relative; display: inline-block; z-index: 2; }
-    .brand > span { position: relative; z-index: 1; }
-    .brand-mark { position: relative; z-index: 2; width: 180px; height: 180px; object-fit: contain; display: block; }
-    .brand strong { display: block; line-height: 1.1; font-size: 24px; }
-    .brand small { opacity: .9; font-size: 14px; }
-    nav { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-    nav a { color: #000; text-decoration: none; padding: 10px 16px; border-radius: 8px; font-size: 16px; }
-    nav a.active, nav a:hover { background: #f0e000; color: #000; }
-    .btn-login { background: #1f6f3f; color: white !important; }
-    .btn-login:hover { background: #175a32; }
-    .btn-admin { background: #1f6f3f; color: white !important; }
-    .btn-admin:hover { background: #175a32; }
-    .btn-logout { background: #dc3545; color: white !important; border: none; padding: 10px 16px; border-radius: 8px; font-size: 16px; cursor: pointer; }
-    .btn-logout:hover { background: #b52b37; }
-    .wrap { max-width: 1000px; margin: 0 auto; }
+    .topbar {
+      background: var(--color-surface);
+      color: var(--color-text);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--color-border);
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--color-text);
+      text-decoration: none;
+      min-width: 200px;
+    }
+    .logo-wrap {
+      display: inline-block;
+    }
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      display: block;
+    }
+    .brand strong {
+      display: block;
+      line-height: 1.1;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .brand small {
+      color: var(--color-text-muted);
+      font-size: 0.75rem;
+      opacity: 0.9;
+    }
+    nav {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-left: auto;
+    }
+    nav a.router-link-active,
+    nav a.router-link-active:hover,
+    nav a:hover {
+      background: var(--color-surface-hover);
+      color: var(--color-primary);
+    }
+    .btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
   `]
 })
 export class HeaderComponent {

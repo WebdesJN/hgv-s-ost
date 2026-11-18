@@ -9,44 +9,51 @@ import { NewsItem } from '../models/news.model';
   imports: [RouterLink],
   template: `
     <section class="hero">
-      <h1>Ost Blog</h1>
-      <p>News, Infos und Tipps aus Stuttgart-Ost</p>
-      <a routerLink="/aktuelles" class="btn">Zu Aktuelles</a>
+      <div class="hero-content">
+        <h1>Willkommen bei HGV Stuttgart Ost</h1>
+        <p class="hero-sub">News, Infos und Tipps aus dem Stadtteil Stuttgart-Ost</p>
+        <a routerLink="/aktuelles" class="btn btn-primary">Zu Aktuelles</a>
+      </div>
     </section>
 
-    <section class="grid">
-      <div class="card">
-        <h3>Verzeichnis</h3>
-        <p>
-          Alle Einträge, HGV-Mitglieder, Ärzte, Gastronomie & Co.
-          (Demo-Platzhalter).
-        </p>
-      </div>
-      <div class="card">
+    <section class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📰</div>
         <h3>Aktuelles</h3>
-        <p>
-          Nachrichten, Veranstaltungen, Märkte und Aufrufe aus dem Stadtteil.
-        </p>
-        <a routerLink="/aktuelles">Ansehen →</a>
+        <p>Nachrichten, Veranstaltungen, Märkte und Aufrufe aus dem Stadtteil.</p>
+        <a routerLink="/aktuelles" class="feature-link">Mehr erfahren →</a>
       </div>
-      <div class="card">
-        <h3>Zeitung</h3>
+      <div class="feature-card">
+        <div class="feature-icon">🏪</div>
+        <h3>Mitglieder-Verzeichnis</h3>
+        <p>Alle HGV-Mitglieder, Ärzte, Gastronomie & Co. (Demo-Platzhalter).</p>
+        <a routerLink="/aktuelles" class="feature-link">Zum Verzeichnis →</a>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📄</div>
+        <h3>Zeitung & Service</h3>
         <p>Der HGV Ost, Service, Kontakt und mehr (Demo-Platzhalter).</p>
+        <a routerLink="/kontakt" class="feature-link">Kontakt aufnehmen →</a>
       </div>
     </section>
 
     @if (loadingNews()) {
       <section class="news-preview">
-        <h2>Neueste Beiträge</h2>
-        <p>Lade …</p>
+        <div class="section-header">
+          <h2>Neueste Beiträge</h2>
+        </div>
+        <div class="news-skeleton">Lade …</div>
       </section>
     } @else if (latestNews().length > 0) {
       <section class="news-preview">
-        <h2>Neueste Beiträge</h2>
+        <div class="section-header">
+          <h2>Neueste Beiträge</h2>
+          <a routerLink="/aktuelles" class="btn btn-sm btn-ghost">Alle Beiträge</a>
+        </div>
         <div class="news-list">
           @for (n of latestNews(); track n.id) {
             <article class="news-card">
-              <span class="badge">{{ n.kategorie }}</span>
+              <span class="badge bg-primary">{{ n.kategorie }}</span>
               <h3><a [routerLink]="['/aktuelles', n.id]">{{ n.titel }}</a></h3>
               <p class="date">{{ n.veroeffentlicht_am }}</p>
               <p class="teaser">{{ n.teaser }}</p>
@@ -54,118 +61,161 @@ import { NewsItem } from '../models/news.model';
             </article>
           }
         </div>
-        <a routerLink="/aktuelles" class="view-all">Alle Beiträge ansehen →</a>
       </section>
     } @else {
       <section class="news-preview">
-        <h2>Neueste Beiträge</h2>
-        <p>Noch keine Beiträge vorhanden.</p>
+        <div class="section-header">
+          <h2>Neueste Beiträge</h2>
+        </div>
+        <div class="empty-state">
+          <p>Noch keine Beiträge vorhanden.</p>
+        </div>
       </section>
     }
   `,
   styles: [`
     .hero {
-      background: #eef6f0;
-      border: 1px solid #cfe4d6;
-      border-radius: 14px;
-      padding: 28px;
+      background: linear-gradient(135deg, var(--color-primary) 0%, #115e59 100%);
+      color: var(--color-inverse);
+      border-radius: var(--radius-lg);
+      padding: var(--space-2xl) var(--space-lg);
+      margin-bottom: var(--space-xl);
+      text-align: center;
     }
     .hero h1 {
-      margin: 0 0 8px;
-      color: #1f6f3f;
+      margin: 0 0 var(--space-sm);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-inverse);
     }
-    .btn {
-      display: inline-block;
-      margin-top: 12px;
-      background: #1f6f3f;
-      color: #fff;
-      padding: 10px 16px;
-      border-radius: 8px;
-      text-decoration: none;
+    .hero-sub {
+      margin: 0 0 var(--space-lg);
+      font-size: 1.1rem;
+      color: var(--color-primary-light);
+      opacity: 0.95;
     }
-    .grid {
+    .feature-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-      margin-top: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
     }
-    .card {
-      border: 1px solid #e2e2e2;
-      border-radius: 12px;
-      padding: 16px;
-      background: #fff;
+    .feature-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
     }
-    .card a {
-      color: #1f6f3f;
+    .feature-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--color-border-hover);
+      transform: translateY(-2px);
+    }
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: var(--space-xs);
+    }
+    .feature-card h3 {
+      margin: 0 0 var(--space-sm);
+      font-size: 1.1rem;
+      color: var(--color-text);
+    }
+    .feature-card p {
+      margin: 0 0 var(--space-md);
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .feature-link {
+      color: var(--color-primary);
       font-weight: 600;
+      font-size: 0.875rem;
+      align-self: flex-start;
+    }
+    .feature-link:hover {
+      text-decoration: underline;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-md);
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .section-header h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      color: var(--color-text);
     }
     .news-preview {
-      margin-top: 32px;
+      margin-top: var(--space-xl);
     }
-    .news-preview h2 {
-      color: #1f6f3f;
-      margin-bottom: 16px;
+    .news-skeleton {
+      padding: var(--space-lg);
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
     }
     .news-list {
       display: grid;
-      gap: 14px;
+      gap: var(--space-md);
     }
     .news-card {
-      border: 1px solid #e2e2e2;
-      border-radius: 12px;
-      padding: 16px;
-      background: #fff;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      transition: var(--transition);
+    }
+    .news-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--color-border-hover);
     }
     .news-card .badge {
-      display: inline-block;
-      background: #1f6f3f;
-      color: #fff;
-      padding: 2px 10px;
-      border-radius: 12px;
-      font-size: 12px;
-      margin-bottom: 8px;
+      margin-bottom: var(--space-sm);
     }
     .news-card h3 {
-      margin: 0 0 6px;
-      font-size: 18px;
+      margin: 0 0 var(--space-xs);
+      font-size: 1.1rem;
     }
     .news-card h3 a {
-      color: #1a1a1a;
-      text-decoration: none;
+      color: var(--color-text);
+      font-weight: 600;
     }
     .news-card h3 a:hover {
-      color: #1f6f3f;
-      text-decoration: underline;
+      color: var(--color-primary);
     }
     .news-card .date {
-      font-size: 13px;
-      color: #666;
-      margin: 0 0 8px;
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      margin: 0 0 var(--space-sm);
     }
     .news-card .teaser {
-      font-size: 14px;
-      color: #333;
-      margin: 0 0 12px;
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      margin: 0 0 var(--space-md);
       line-height: 1.5;
     }
     .news-card .read-more {
-      color: #1f6f3f;
+      color: var(--color-primary);
       font-weight: 600;
-      text-decoration: none;
-      font-size: 14px;
+      font-size: 0.875rem;
     }
     .news-card .read-more:hover {
       text-decoration: underline;
     }
-    .view-all {
-      display: inline-block;
-      margin-top: 16px;
-      color: #1f6f3f;
-      font-weight: 600;
-      text-decoration: none;
+    .empty-state {
+      padding: var(--space-lg);
+      color: var(--color-text-muted);
+      text-align: center;
     }
-    .view-all:hover {
-      text-decoration: underline;
+    .btn-sm {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
     }
   `],
 })

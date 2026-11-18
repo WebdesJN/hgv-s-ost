@@ -8,32 +8,92 @@ import { NewsItem } from '../models/news.model';
   standalone: true,
   imports: [RouterLink],
   template: `
-    @if (loading()) {
-      <p>Lade …</p>
-    } @else if (item()) {
-      <a routerLink="/aktuelles" class="back">← Zurück zu Aktuelles</a>
-      <span class="badge">{{ item()?.kategorie }}</span>
-      <h1>{{ item()?.titel }}</h1>
-      @if (item()?.bild_url) {
-        <img [src]="item()?.bild_url" [alt]="item()?.titel" class="detail-image" />
+    <section class="news-detail-section">
+      @if (loading()) {
+        <div class="loading-state">Lade …</div>
+      } @else if (item()) {
+        <a routerLink="/aktuelles" class="btn btn-sm btn-ghost">← Zurück zu Aktuelles</a>
+        <span class="badge bg-primary">{{ item()?.kategorie }}</span>
+        <h1>{{ item()?.titel }}</h1>
+        @if (item()?.bild_url) {
+          <img [src]="item()?.bild_url" [alt]="item()?.titel" class="detail-image" />
+        }
+        <p class="meta">
+          <span>Kategorie: {{ item()?.kategorie }}</span>
+          <span>· Veröffentlicht: {{ item()?.veroeffentlicht_am }}</span>
+          <span>· Zugriffe: {{ item()?.views }}</span>
+        </p>
+        @for (p of item()?.inhalt; track $index) {
+          <p>{{ p }}</p>
+        }
+      } @else {
+        <div class="empty-state">
+          <h1>Nicht gefunden</h1>
+          <p>Diesen Beitrag gibt es nicht.</p>
+          <a routerLink="/aktuelles" class="btn btn-primary">Zurück zu Aktuelles</a>
+        </div>
       }
-      <p class="meta">Details · Kategorie: {{ item()?.kategorie }} · Veröffentlicht: {{ item()?.veroeffentlicht_am }} · Zugriffe: {{ item()?.views }}</p>
-      @for (p of item()?.inhalt; track $index) {
-        <p>{{ p }}</p>
-      }
-    } @else {
-      <h1>Nicht gefunden</h1>
-      <p>Diesen Beitrag gibt es nicht.</p>
-      <a routerLink="/aktuelles">Zurück</a>
-    }
+    </section>
   `,
   styles: [`
-    .back { color: #1f6f3f; text-decoration: none; font-size: 14px; display: inline-block; margin-bottom: 10px; }
-    .badge { background: #1f6f3f; color: #fff; border-radius: 20px; padding: 2px 10px; font-size: 12px; }
-    h1 { margin: 8px 0; }
-    .detail-image { width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; margin: 16px 0; display: block; }
-    .meta { color: #666; font-size: 13px; border-bottom: 1px solid #eee; padding-bottom: 12px; }
-    p { line-height: 1.6; }
+    .news-detail-section {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .loading-state {
+      padding: var(--space-lg);
+      color: var(--color-text-muted);
+      text-align: center;
+    }
+    .back {
+      color: var(--color-primary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      display: inline-block;
+      margin-bottom: var(--space-sm);
+    }
+    .badge { margin-bottom: var(--space-sm); }
+    h1 {
+      margin: 0 0 var(--space-md);
+      font-size: 1.75rem;
+      color: var(--color-text);
+    }
+    .detail-image {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: var(--radius-lg);
+      margin: var(--space-md) 0;
+      display: block;
+    }
+    .meta {
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: var(--space-md);
+      margin-bottom: var(--space-lg);
+      display: flex;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    p {
+      line-height: 1.7;
+      color: var(--color-text);
+      margin-bottom: var(--space-md);
+    }
+    .empty-state {
+      padding: var(--space-2xl);
+      color: var(--color-text-muted);
+      text-align: center;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+    }
+    .empty-state h1 {
+      color: var(--color-text);
+      margin-bottom: var(--space-md);
+    }
   `]
 })
 export class NewsDetailComponent {

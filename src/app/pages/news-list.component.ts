@@ -9,61 +9,133 @@ import { NewsItem } from '../models/news.model';
   standalone: true,
   imports: [FormsModule, RouterLink],
   template: `
-    <h1>Aktuelles</h1>
-    <p class="sub">Nachrichten und Infos aus dem Stadtteil Stuttgart-Ost</p>
-
-    @if (loading()) {
-      <p>Lade …</p>
-    } @else {
-      <div class="toolbar">
-        <input [(ngModel)]="search" placeholder="Suchen …" aria-label="Suchen" />
-        <select [(ngModel)]="category" aria-label="Kategorie">
-          <option value="">Alle Kategorien</option>
-          @for (c of categories(); track c) {
-            <option [value]="c">{{ c }}</option>
-          }
-        </select>
+    <section class="news-list-section">
+      <div class="section-header">
+        <h1>Aktuelles</h1>
+        <p class="sub">Nachrichten und Infos aus dem Stadtteil Stuttgart-Ost</p>
       </div>
 
-      <div class="list">
-        @for (n of filtered(); track n.id) {
-          <article class="item">
-            @if (n.bild_url) {
-              <img [src]="n.bild_url" [alt]="n.titel" class="item-image" />
+      @if (loading()) {
+        <div class="loading-state">Lade …</div>
+      } @else {
+        <div class="toolbar">
+          <input [(ngModel)]="search" placeholder="Suchen …" aria-label="Suchen" />
+          <select [(ngModel)]="category" aria-label="Kategorie">
+            <option value="">Alle Kategorien</option>
+            @for (c of categories(); track c) {
+              <option [value]="c">{{ c }}</option>
             }
-            <div class="meta">
-              <span class="badge">{{ n.kategorie }}</span>
-              <span>Veröffentlicht: {{ n.veroeffentlicht_am }}</span>
-              <span>Zugriffe: {{ n.views }}</span>
-            </div>
-            <h2><a [routerLink]="['/aktuelles', n.id]">{{ n.titel }}</a></h2>
-            <p>{{ n.teaser }}</p>
-            <a [routerLink]="['/aktuelles', n.id]" class="details">Details →</a>
-          </article>
-        } @empty {
-          <p>Keine Einträge gefunden.</p>
-        }
-      </div>
+          </select>
+        </div>
 
-      <p class="hint">Start · Zurück · 1 · Weiter · Ende</p>
-    }
+        <div class="list">
+          @for (n of filtered(); track n.id) {
+            <article class="item">
+              @if (n.bild_url) {
+                <img [src]="n.bild_url" [alt]="n.titel" class="item-image" />
+              }
+              <div class="meta">
+                <span class="badge bg-primary">{{ n.kategorie }}</span>
+                <span>Veröffentlicht: {{ n.veroeffentlicht_am }}</span>
+                <span>Zugriffe: {{ n.views }}</span>
+              </div>
+              <h2><a [routerLink]="['/aktuelles', n.id]">{{ n.titel }}</a></h2>
+              <p>{{ n.teaser }}</p>
+              <a [routerLink]="['/aktuelles', n.id]" class="details">Details →</a>
+            </article>
+          } @empty {
+            <div class="empty-state">
+              <p>Keine Einträge gefunden.</p>
+            </div>
+          }
+        </div>
+      }
+    </section>
   `,
   styles: [`
-    h1 { color: #1f6f3f; margin-bottom: 0; }
-    .sub { color: #555; margin-top: 4px; }
-    .toolbar { display: flex; gap: 10px; margin: 16px 0; flex-wrap: wrap; }
-    input, select { padding: 10px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
-    input { flex: 1; min-width: 200px; }
-    .list { display: grid; gap: 14px; }
-    .item { border: 1px solid #e3e3e3; border-radius: 12px; padding: 16px; background: #fff; }
-    .item-image { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; display: block; }
-    .item h2 { margin: 8px 0; font-size: 20px; }
-    .item h2 a { color: #1a1a1a; text-decoration: none; }
-    .item h2 a:hover { color: #1f6f3f; text-decoration: underline; }
-    .meta { display: flex; gap: 12px; flex-wrap: wrap; font-size: 13px; color: #666; align-items: center; }
-    .badge { background: #1f6f3f; color: #fff; border-radius: 20px; padding: 2px 10px; font-size: 12px; }
-    .details { color: #1f6f3f; font-weight: 600; text-decoration: none; font-size: 14px; }
-    .hint { color: #888; font-size: 13px; margin-top: 16px; }
+    .news-list-section {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .section-header {
+      margin-bottom: var(--space-lg);
+    }
+    h1 {
+      margin: 0 0 var(--space-xs);
+      color: var(--color-primary);
+      font-size: 2rem;
+    }
+    .sub {
+      margin: 0;
+      color: var(--color-text-muted);
+      font-size: 1rem;
+    }
+    .toolbar {
+      display: flex;
+      gap: var(--space-sm);
+      margin: var(--space-md) 0;
+      flex-wrap: wrap;
+    }
+    input, select {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      background: var(--color-surface);
+      color: var(--color-text);
+    }
+    input { flex: 1; min-width: 220px; }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-primary-light);
+    }
+    .list { display: grid; gap: var(--space-md); }
+    .item {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      transition: var(--transition);
+    }
+    .item:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--color-border-hover);
+    }
+    .item-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-sm);
+      display: block;
+    }
+    .item h2 { margin: 0 0 var(--space-xs); font-size: 1.25rem; }
+    .item h2 a { color: var(--color-text); font-weight: 600; }
+    .item h2 a:hover { color: var(--color-primary); text-decoration: underline; }
+    .meta { display: flex; gap: var(--space-sm); flex-wrap: wrap; font-size: 0.85rem; color: var(--color-text-muted); align-items: center; margin-bottom: var(--space-sm); }
+    .badge { margin-bottom: 0; }
+    .details {
+      color: var(--color-primary);
+      font-weight: 600;
+      font-size: 0.875rem;
+      display: inline-block;
+      margin-top: var(--space-xs);
+    }
+    .details:hover { text-decoration: underline; }
+    .empty-state {
+      padding: var(--space-lg);
+      color: var(--color-text-muted);
+      text-align: center;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+    }
+    .loading-state {
+      padding: var(--space-lg);
+      color: var(--color-text-muted);
+      text-align: center;
+    }
   `]
 })
 export class NewsListComponent {
